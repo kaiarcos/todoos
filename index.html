@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+    <script type="text/javascript">
+        function addTask() {
+            console.log(Array.from(document.querySelectorAll('input[type="checkbox"]')).map(it => it.checked));
+            const userTask_element = document.getElementById('txt_task');
+            const userTask = userTask_element.value;
+
+            document.getElementById('task_list').innerHTML += makeTaskHTML(userTask);
+            console.log(Array.from(document.querySelectorAll('input[type="checkbox"]')).map(it => it.checked));
+            userTask_element.value = "";
+        }
+
+        function deleteTask(task) {
+            task.remove();
+        }
+
+        function makeEditable(task) {
+            const taskName = task.querySelector('.task-name');
+
+            taskName.contentEditable = true;
+        }
+
+        function makeNonEditable(task) {
+            const taskName = task.querySelector('.task-name');
+
+            taskName.contentEditable = false;
+        }
+
+        function filterAll() {
+            const taskList = Array.from(document.getElementById('task_list').children);
+
+            taskList.forEach(task => {
+                showElement(task);
+            })
+        }
+
+        function filterActive() {
+            const taskList = Array.from(document.getElementById('task_list').children);
+
+            taskList.forEach(task => {
+                const check = task.querySelector('input[type="checkbox"]').checked;
+
+                if (check) {
+                    hideElement(task);
+                } else {
+                    showElement(task);
+                }
+            })
+        }
+
+        function filterCompleted() {
+            const taskList = Array.from(document.getElementById('task_list').children);
+
+            taskList.forEach(task => {
+                const check = task.querySelector('input[type="checkbox"]').checked;
+
+                if (!check) {
+                    hideElement(task);
+                } else {
+                    showElement(task);
+                }
+            })
+        }
+
+        function clearCompleted() {
+            const taskList = Array.from(document.getElementById('task_list').children);
+
+            taskList.forEach(task => {
+                const check = task.querySelector('input[type="checkbox"]').checked;
+
+                if (check) {
+                    task.remove();
+                }
+            })
+        }
+
+        function showElement(element) {
+            element.classList.remove("hidden");
+        }
+
+        function hideElement(element) {
+            element.classList.add("hidden");
+        }
+
+        function logCheck(element) {
+            element.setAttribute("checked", element.checked);
+        }
+
+        function makeTaskHTML(task) {
+            return `<div class="task">
+                    <input type="checkbox" onchange="javascript:logCheck(this)">
+                    <span onfocusout="javascript:makeNonEditable(this.parentElement)" class="task-name">${task}</span>
+                    <button class="push edit" title="Edit" onclick="javascript:makeEditable(this.parentElement)"><i class="uil uil-edit-alt"></i></button>
+                    <button class="delete" title="Delete" onclick="javascript:deleteTask(this.parentElement)"><i class="uil uil-times"></i></button>
+                    </div>`;
+        }
+
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            font-family: 'Roboto', sans-serif;
+            background-color: #FFF9EC;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: center;
+            color: #5D2A42;
+        }
+
+        .content {
+            flex: 0.9 0 auto;
+            width: 40%;
+        }
+
+        @media (max-width:768px) {
+            .content {
+                width: 75%;
+            }
+        }
+
+        @media (min-width:1025px) {
+            .content {
+                width: 30%;
+            }
+        }
+
+        h1.title {
+            font-family: 'Spartan', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: -0.3rem;
+            margin: 56px 0px 48px 0px;
+        }
+
+        #task-form {
+            display: flex;
+            gap: 4px;
+        }
+
+        input[type=text],
+        .filter,
+        .clear {
+            color: #5D2A42;
+        }
+
+        input[type=text] {
+            flex: 1 0 auto;
+            caret-color: white;
+            background-color: #AFDEDC;
+            border: none;
+            border-radius: 50px;
+            padding: 16px;
+            font-size: 0.9rem;
+        }
+
+        input[type=text]:focus {
+            outline: none;
+            box-shadow: 1px 1px 4px rgba(93, 42, 66, 0.1);
+        }
+
+        @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+
+            input[type=checkbox] {
+                --active: #FFF9EC;
+                --active-inner: #e24e7b;
+                --focus: 2px rgb(6 141 134 / 25%);
+                --border: #FFF9EC;
+                --border-hover: #0EA39B;
+                --background: #FFF9EC;
+                --disabled: #F6F8FF;
+                --disabled-inner: #E1E6F9;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                height: 24px;
+                outline: none;
+                display: inline-block;
+                vertical-align: top;
+                position: relative;
+                margin: 0;
+                cursor: pointer;
+                border: 1px solid var(--bc, var(--border));
+                background: var(--b, var(--background));
+                transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
+            }
+
+            input[type=checkbox]:after {
+                content: "";
+                display: block;
+                left: 0;
+                top: 0;
+                position: absolute;
+                transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
+            }
+
+            input[type=checkbox]:checked {
+                --b: var(--active);
+                --bc: var(--active);
+                --d-o: .3s;
+                --d-t: .6s;
+                --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+            }
+
+            input[type=checkbox]:disabled {
+                --b: var(--disabled);
+                cursor: not-allowed;
+                opacity: 0.9;
+            }
+
+            input[type=checkbox]:disabled:checked {
+                --b: var(--disabled-inner);
+                --bc: var(--border);
+            }
+
+            input[type=checkbox]:disabled+label {
+                cursor: not-allowed;
+            }
+
+            input[type=checkbox]:hover:not(:checked):not(:disabled) {
+                --bc: var(--border-hover);
+            }
+
+            input[type=checkbox]:focus {
+                box-shadow: 0 0 0 var(--focus);
+            }
+
+            input[type=checkbox]:not(.switch) {
+                width: 24px;
+            }
+
+            input[type=checkbox]:not(.switch):after {
+                opacity: var(--o, 0);
+            }
+
+            input[type=checkbox]:not(.switch):checked {
+                --o: 1;
+            }
+
+            input[type=checkbox]+label {
+                font-size: 14px;
+                line-height: 23px;
+                display: inline-block;
+                vertical-align: top;
+                cursor: pointer;
+                margin-left: 4px;
+            }
+
+            input[type=checkbox]:not(.switch) {
+                border-radius: 50px;
+            }
+
+            input[type=checkbox]:not(.switch):after {
+                width: 6px;
+                height: 10px;
+                border: 2px solid var(--active-inner);
+                border-top: 0;
+                border-left: 0;
+                left: 7px;
+                top: 3px;
+                transform: rotate(var(--r, 20deg));
+            }
+
+            input[type=checkbox]:not(.switch):checked {
+                --r: 43deg;
+            }
+
+            input[type=checkbox].switch {
+                width: 38px;
+                border-radius: 50px;
+            }
+
+            input[type=checkbox].switch:after {
+                left: 2px;
+                top: 2px;
+                border-radius: 100%;
+                width: 15px;
+                height: 15px;
+                background: var(--ab, var(--border));
+                transform: translateX(var(--x, 0));
+            }
+
+            input[type=checkbox].switch:checked {
+                --ab: var(--active-inner);
+                --x: 17px;
+            }
+
+            input[type=checkbox].switch:disabled:not(:checked):after {
+                opacity: 0.6;
+            }
+        }
+
+        .add {
+            text-decoration: none;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1.2rem;
+            text-align: center;
+            background-color: #E24E7B;
+            padding: 11px 14px;
+            cursor: pointer;
+            color: white;
+            transition: background 250ms ease-in-out,
+                color 250ms,
+                transform 250ms ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .add:hover {
+            box-shadow: 1px 1px 4px rgba(93, 42, 66, 0.1);
+        }
+
+        #filter-box {
+            display: flex;
+            gap: 10px;
+            margin: 26px 2px 14px;
+        }
+
+        .filter {
+            flex-grow: 1;
+            border-radius: 50px;
+            text-decoration: none;
+            border: 2px solid #F4BDCF;
+            background-color: #ffffff00;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: bold;
+            padding: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 250ms ease-in-out,
+                transform 150ms ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        #bottom-button-box {
+            display: flex;
+            justify-content: center;
+        }
+
+        .clear {
+            flex-grow: 0.2;
+            border-radius: 50px;
+            text-decoration: none;
+            border: none;
+            background-color: #F4BDCF;
+            font-family: inherit;
+            font-weight: bold;
+            padding: 7px 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 250ms ease-in-out,
+                transform 150ms ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .filter:hover,
+        .clear:hover {
+            background: #F4BDCF;
+            box-shadow: 1px 1px 4px rgba(93, 42, 66, 0.1);
+        }
+
+        .filter:active,
+        .clear:active {
+            background-color: #F4BDCF;
+        }
+
+        .filter:focus,
+        .clear:focus {
+            background-color: #F4BDCF;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            margin-bottom: 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            background-color: #AFDEDC;
+        }
+
+        .edit,
+        .delete {
+            text-decoration: none;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 1px 3px;
+            cursor: pointer;
+            color: #0EA39B;
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.2s, color 0.2s;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .edit {
+            background-color: #AFDEDC;
+        }
+
+        .delete {
+            background-color: #FFF9EC;
+            border: 1px solid var(--bc, #FFF9EC);
+        }
+
+        .edit:hover,
+        .delete:hover {
+            color: #00817a;
+            text-shadow: 1px 1px 1px #068d8641;
+        }
+
+        .delete:hover {
+            border: 1px solid var(--bc, #0EA39B);
+        }
+
+        .footer {
+            flex: 0.1 0 auto;
+            margin-top: 8px;
+            padding: 24px;
+            color: #5D2A42;
+        }
+
+        .footer-social {
+            display: block;
+            margin-top: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        a.social {
+            color: #5D2A42;
+            cursor: pointer;
+            transition: background 250ms ease-in-out,
+                color 250ms,
+                transform 250ms ease;
+        }
+
+        a.social:hover {
+            color: #E24E7B;
+        }
+
+        .push {
+            margin-left: auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="title">todos</h1>
+    </header>
+
+    <div class="content">
+        <form id="task-form" action="javascript:addTask()">
+            <input type="text" name="task" id="txt_task">
+            <button type="submit" class="add" title="Add task"><i class="uil uil-plus"></i></button>
+        </form>
+
+        <div id="filter-box">
+            <button class="filter" onclick="javascript:filterAll()">All</button>
+            <button class="filter" onclick="javascript:filterActive()">Active</button>
+            <button class="filter" onclick="javascript:filterCompleted()">Completed</button>
+        </div>
+
+
+        <div id="task_list"></div>
+
+        <div id="bottom-button-box">
+            <button class="clear" onclick="javascript:clearCompleted()">Clear completed</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <span>Made with </span><i class="uil uil-heart"></i><span> by Kai.</span>
+
+        <div class="footer-social">
+            <a href="https://kaiajimenez.com/" class="social"><i class="uil uil-globe" title="Kai's Portfolio"></i></a>
+            <a href="https://github.com/kaiarcos" class="social"><i class="uil uil-github" title="GitHub"></i></a>
+        </div>
+    </footer>
+
+</body>
+
+</html>
