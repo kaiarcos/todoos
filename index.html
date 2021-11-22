@@ -176,6 +176,10 @@
             box-shadow: 1px 1px 4px rgba(93, 42, 66, 0.1);
         }
 
+        ::placeholder {
+            color:#5d2a42ab;
+        }
+
         @supports (-webkit-appearance: none) or (-moz-appearance: none) {
 
             input[type=checkbox] {
@@ -479,7 +483,7 @@
 
     <div class="content">
         <form id="task-form" action="javascript:addTask()">
-            <input type="text" name="task" id="txt_task">
+            <input type="text" id="txt_task" name="task" placeholder="What needs to be done?">
             <button type="submit" class="add" title="Add task"><i class="uil uil-plus"></i></button>
         </form>
 
