@@ -1,7 +1,7 @@
 # todoos
 A cute and simple to-do list web app, with a focus on user interface design.
 
-Learn more about the design process [here](https://kaiajimenez.com/portfolio/todoos/)!
+Learn more about the design process [here](https://kaiajimenez.com/portfolio/toodoos/)!
 
 **Features:**
 - Adding and removing tasks
